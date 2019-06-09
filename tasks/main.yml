@@ -1,2 +1,18 @@
 ---
 # tasks file for httpd
+- name: Install the specified version of Apache HTTPD
+  yum:
+    name: "{{ http_version }}"
+    state: installed
+    allow_downgrade: yes
+  when: {{ http_version }} != "latest"
+
+- name: Restart Apache HTTPD gracefully
+  command: apachectl -k graceful
+
+- name: Set systemd to start Apache on boot
+  systemd:
+    name: httpd
+    enabled: yes
+    daemon_reload: yes
+    state: started

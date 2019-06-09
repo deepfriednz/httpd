@@ -24,8 +24,9 @@ rpm_name - variable to allow changing the name of the rpm used temporarily by th
 Example Playbook
 ----------------
 
+```
 - name: HTTPD install
   hosts: all
   roles:
     - httpd
-    
+```

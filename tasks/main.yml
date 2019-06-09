@@ -38,11 +38,13 @@
     allow_downgrade: yes
     skip_broken: yes
   when: installed_version['stdout'] != http_version and action == "normal"
+  notify: Restart Apache
 
 - name: Run re-install of Apache HTTPD as versions are the same
   shell: |
     yum -y reinstall /tmp/{{ rpm_name }}
   when: installed_version['stdout'] == http_version and action == "reinstall"
+  notify: Restart Apache
 
 - name: Allow port 80 firewall
   firewalld:
@@ -57,9 +59,6 @@
     enabled: yes
     daemon_reload: yes
     state: started
-
-- name: Restart Apache HTTPD gracefully
-  command: httpd -k graceful
 
 - name: Clean up rpm file
   file:

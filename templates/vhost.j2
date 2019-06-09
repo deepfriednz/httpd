@@ -1,0 +1,11 @@
+# Ensure that Apache listens on port 80
+Listen 80
+ServerName {{ ansible_hostname }}
+DocumentRoot "/var/www/html"
+
+<VirtualHost *:80>
+    DocumentRoot "/var/www/example1"
+    ServerName www.example.com
+
+
+</VirtualHost>

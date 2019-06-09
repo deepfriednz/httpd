@@ -5,14 +5,6 @@
     dest: "/tmp/{{ rpm_name }}"
     url: "{{ rpm_location }}"
 
-- name: Get current version of Apache installed
-  package_facts:
-    manager: rpm
-  register: packages
-
-- debug:
-    var: packages.ansible_facts.packages['httpd'][0]['release']
-
 - name: Get installed Apache via yum
   shell: |
     yum list installed httpd.x86_64 | tail -n1 | awk '{print $2}'
@@ -27,8 +19,8 @@
     drain: yes
     wait: yes
     host: "{{ inventory_hostname }}"
-    backend: www
-    socket: /var/run/haproxy.sock
+    backend: "{{ haproxy_backend }}"
+    socket: "{{ haproxy_socket }}"
   ignore_errors: true
 
 - name: Install the specified version of Apache HTTPD
@@ -38,13 +30,17 @@
     allow_downgrade: yes
     skip_broken: yes
   when: installed_version['stdout'] != http_version and action == "normal"
-  notify: Restart Apache
+  notify:
+    - Restart Apache
+    - Enable server on HAProxy
 
 - name: Run re-install of Apache HTTPD as versions are the same
   shell: |
     yum -y reinstall /tmp/{{ rpm_name }}
   when: installed_version['stdout'] == http_version and action == "reinstall"
-  notify: Restart Apache
+  notify:
+    - Restart Apache
+    - Enable server on HAProxy
 
 - name: Allow port 80 firewall
   firewalld:
@@ -64,12 +60,3 @@
   file:
     path: /tmp/apache.rpm
     state: absent
-
-- name: Enable server on HAProxy
-  haproxy:
-    state: enabled
-    wait: yes
-    host: "{{ inventory_hostname }}"
-    backend: www
-    socket: /var/run/haproxy.sock
-  ignore_errors: true

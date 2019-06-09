@@ -2,3 +2,12 @@
 # handlers file for httpd
 - name: Restart Apache #Graceful restart
   command: httpd -k graceful
+
+- name: Enable server on HAProxy
+  haproxy:
+    state: enabled
+    wait: yes
+    host: "{{ inventory_hostname }}"
+    backend: "{{ haproxy_backend }}"
+    socket: "{{ haproxy_socket }}"
+  ignore_errors: true

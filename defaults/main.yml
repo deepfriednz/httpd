@@ -5,4 +5,6 @@
 rpm_location: http://ucmirror.canterbury.ac.nz/linux/centos/7.6.1810/os/x86_64/Packages/httpd-2.4.6-88.el7.centos.x86_64.rpm
 http_version: 2.4.6-88.el7.centos
 rpm_name: apache.rpm
+haproxy_backend: www
+haproxy_socket: /var/run/haproxy.sock
 action: normal #reinstall, downgrade, normal

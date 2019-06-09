@@ -15,6 +15,7 @@ Requirements
 ------------
 
 Ansible 2.6 <
+
 CentOS 7.x <
 
 Role Variables

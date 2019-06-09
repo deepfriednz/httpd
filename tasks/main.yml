@@ -15,6 +15,7 @@
     name: /tmp/apache.rpm
     state: installed
     allow_downgrade: yes
+    skip_broken: yes
 
 - name: Allow port 80 firewall
   firewalld:

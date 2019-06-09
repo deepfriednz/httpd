@@ -11,6 +11,7 @@
     service: http
     permanent: yes
     state: enabled
+    immediate: yes
 
 - name: Set systemd to start Apache on boot
   systemd:

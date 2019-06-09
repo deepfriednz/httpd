@@ -37,12 +37,12 @@
     state: installed
     allow_downgrade: yes
     skip_broken: yes
-  when: installed_version['stdout'] != "{{ http_version }}"
+  when: installed_version['stdout'] != http_version
 
-- name: Run re-install of Apache HTTPD install
+- name: Run re-install of Apache HTTPD as versions are the same
   shell: |
     yum reinstall /tmp/{{ rpm_name }}
-  when: installed_version['stdout'] == "{{ http_version }}"
+  when: installed_version['stdout'] == http_version 
 
 - name: Allow port 80 firewall
   firewalld:

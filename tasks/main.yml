@@ -10,6 +10,26 @@
     manager: rpm
   register: packages
 
+- debug:
+    var: packages.ansible_facts.packages['httpd'][0]['release']
+
+- name: Get installed Apache via yum
+  shell: |
+    yum list installed httpd.x86_64 | tail -n1 | awk '{print $2}'
+  register: test
+
+- debug:
+     var: test['stdout']
+
+- name: Disable server on HAProxy by draining
+  haproxy:
+    state: disabled
+    drain: yes
+    wait: yes
+    host: "{{ inventory_hostname }}"
+    backend: www
+    socket: /var/run/haproxy.sock
+
 - name: Install the specified version of Apache HTTPD
   yum:
     name: /tmp/apache.rpm
@@ -33,3 +53,16 @@
 
 - name: Restart Apache HTTPD gracefully
   command: httpd -k graceful
+
+- name: Clean up rpm file
+  file:
+    path: /tmp/apache.rpm
+    state: absent
+
+- name: Enable server on HAProxy
+  haproxy:
+    state: enabled
+    wait: yes
+    host: "{{ inventory_hostname }}"
+    backend: www
+    socket: /var/run/haproxy.sock

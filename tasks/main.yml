@@ -1,8 +1,13 @@
 ---
 # tasks file for httpd
+- name: Fetch Apache Package from remote rpm_location
+  get_url:
+    dest: /tmp/apache.rpm
+    url: "{{ rpm_location }}"
+
 - name: Install the specified version of Apache HTTPD
   yum:
-    name: "{{ http_version }}"
+    name: /tmp/apache.rpm
     state: installed
     allow_downgrade: yes
 

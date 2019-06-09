@@ -1,3 +1,4 @@
 ---
 # defaults file for httpd
+rpm_location: http://ftp.wicks.co.nz/pub/linux/dist/centos/7.6.1810/updates/x86_64/Packages/httpd-2.4.6-89.el7.centos.x86_64.rpm
 http_version: httpd-2.4.6-89.el7.centos

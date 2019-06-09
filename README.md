@@ -24,7 +24,8 @@ rpm_name - variable to allow changing the name of the rpm used temporarily by th
 Example Playbook
 ----------------
 
-name: HTTPD setup on CentOS
-hosts: all
-roles:
-  - httpd
+- name: HTTPD install
+  hosts: all
+  roles:
+    - httpd
+    

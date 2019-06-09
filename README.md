@@ -15,13 +15,16 @@ Role Variables
 --------------
 
 rpm_location - link to a download URL of the httpd rpm file
+
 http_version - version string to compare with the currently installed httpd (if any)
+
 rpm_name - variable to allow changing the name of the rpm used temporarily by the role
+
 
 Example Playbook
 ----------------
 
-- name: HTTPD setup on CentOS
-  hosts: all
-  roles:
-    - httpd
+name: HTTPD setup on CentOS
+hosts: all
+roles:
+  - httpd

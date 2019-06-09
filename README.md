@@ -1,4 +1,4 @@
-Role Name
+HTTPD
 =========
 
 Role to install a specified version of HTTPD onto CentOS 7.x server using an RPM. This includes requesting HAProxy to drain the connections before starting the install and then re-enabling it during clean up.

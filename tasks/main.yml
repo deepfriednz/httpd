@@ -5,6 +5,11 @@
     dest: /tmp/apache.rpm
     url: "{{ rpm_location }}"
 
+- name: Get current version of Apache installed
+  package_facts:
+    manager: rpm
+  register: packages
+
 - name: Install the specified version of Apache HTTPD
   yum:
     name: /tmp/apache.rpm

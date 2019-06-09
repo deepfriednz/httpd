@@ -2,7 +2,7 @@
 # tasks file for httpd
 - name: Fetch Apache Package from remote rpm_location
   get_url:
-    dest: /tmp/apache.rpm
+    dest: "/tmp/{{ rpm_name }}"
     url: "{{ rpm_location }}"
 
 - name: Get current version of Apache installed
@@ -16,10 +16,10 @@
 - name: Get installed Apache via yum
   shell: |
     yum list installed httpd.x86_64 | tail -n1 | awk '{print $2}'
-  register: test
+  register: installed_version
 
 - debug:
-     var: test['stdout']
+     var: installed_version['stdout']
 
 - name: Disable server on HAProxy by draining
   haproxy:
@@ -29,13 +29,20 @@
     host: "{{ inventory_hostname }}"
     backend: www
     socket: /var/run/haproxy.sock
+  ignore_errors: true
 
 - name: Install the specified version of Apache HTTPD
   yum:
-    name: /tmp/apache.rpm
+    name: "/tmp/{{ rpm_name }}"
     state: installed
     allow_downgrade: yes
     skip_broken: yes
+  when: installed_version['stdout'] != "{{ http_version }}"
+
+- name: Run re-install of Apache HTTPD install
+  shell: |
+    yum reinstall /tmp/{{ rpm_name }}
+  when: installed_version['stdout'] == "{{ http_version }}"
 
 - name: Allow port 80 firewall
   firewalld:
@@ -66,3 +73,4 @@
     host: "{{ inventory_hostname }}"
     backend: www
     socket: /var/run/haproxy.sock
+  ignore_errors: true

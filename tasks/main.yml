@@ -10,7 +10,7 @@
   firewalld:
     service: http
     permanent: yes
-    state: present
+    state: enabled
 
 - name: Set systemd to start Apache on boot
   systemd:

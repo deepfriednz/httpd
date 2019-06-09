@@ -6,8 +6,11 @@
     state: installed
     allow_downgrade: yes
 
-- name: Restart Apache HTTPD gracefully
-  command: apachectl -k graceful
+- name: Allow port 80 firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: present
 
 - name: Set systemd to start Apache on boot
   systemd:
@@ -16,8 +19,5 @@
     daemon_reload: yes
     state: started
 
-- name: Allow port 80 firewall
-  firewalld:
-    service: http
-    permanent: yes
-    state: enabled
+- name: Restart Apache HTTPD gracefully
+  command: httpd -k graceful

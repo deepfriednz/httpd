@@ -5,7 +5,6 @@
     name: "{{ http_version }}"
     state: installed
     allow_downgrade: yes
-  when: {{ http_version }} != "latest"
 
 - name: Restart Apache HTTPD gracefully
   command: apachectl -k graceful
